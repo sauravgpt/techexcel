@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:techexcel/splash/splash_screen.dart';
+import 'package:techexcel/ui/error_screens/error_export.dart';
+import 'package:techexcel/ui/home_screen.dart';
+import 'package:techexcel/ui/splash/splash_screen.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -8,6 +9,13 @@ class AppRouter {
     switch (settings.name) {
       case SplashScreen.routeName:
         return SplashScreen.route();
+
+      case NoConnectionScreen.routeName:
+        return NoConnectionScreen.route();
+
+      case HomeScreen.routeName:
+        return HomeScreen.route();
+
       default:
         return _errorRoute();
     }
