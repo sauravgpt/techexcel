@@ -20,29 +20,67 @@ class SplashScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is InternetDisconnected) {
           Navigator.pushNamed(context, NoConnectionScreen.routeName);
-        } else if (state is InternetConnected) {
-          Navigator.popAndPushNamed(context, HomeScreen.routeName);
         }
       },
       child: Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(top: 48, child: InternetStatusWidget()),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  child: Text(
+                    'Welcome Screen! \n  (Splash screen)',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
 
-    return Builder(
-      builder: (context) {
-        final internetState = context.watch<InternetCubit>().state;
-        if (internetState is InternetDisconnected) {
-          return NoConnectionScreen();
-        }
-        return Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
-    );
+class InternetStatusWidget extends StatelessWidget {
+  const InternetStatusWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final internetBloc = context.watch<InternetCubit>();
+
+    if (internetBloc.state is InternetConnected) {
+      return Container(
+        child: Text(
+          'Internet Connected',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.green,
+              ),
+        ),
+      );
+    } else if (internetBloc.state is InternetDisconnected) {
+      return Container(
+        child: Text(
+          'Internet Disconnected',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.red,
+              ),
+        ),
+      );
+    } else {
+      return Container(
+        child: Text(
+          'Checking Internet Connection',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.lightBlue,
+              ),
+        ),
+      );
+    }
   }
 }
